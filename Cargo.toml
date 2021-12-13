@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "debug_client",
+    "engine",
+    "term_backend"
+]

@@ -1,0 +1,13 @@
+[package]
+name = "engine"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bevy = { version = "0.5.0", default-features = false }
+term_backend = { path = "../term_backend" }
+bevy_spicy_networking = "0.6.0"
+serde = "1.0.130"
+typetag = "0.1.7"
