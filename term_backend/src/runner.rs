@@ -30,7 +30,7 @@ pub fn crossterm_runner(mut app: App) {
     // Use settings in window
     {
         if let Some(title) = &window_settings.title() {
-            window.title = Some(title.clone());
+            window.title = Some(String::from(title.clone()));
             term.queue(crossterm::terminal::SetTitle(&title))
                 .expect("Could not set terminal title");
         }

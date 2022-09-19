@@ -95,7 +95,6 @@ impl Default for CrosstermWindow {
     fn default() -> Self {
         let (width, height) =
             crossterm::terminal::size().expect("Could not read current terminal size");
-
         let colors = components::Colors::term_colors();
         CrosstermWindow {
             height,
