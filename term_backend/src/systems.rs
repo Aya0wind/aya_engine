@@ -6,6 +6,7 @@ use bevy::utils::HashSet;
 use bevy::window::WindowResized;
 use broccoli::prelude::*;
 use crossterm::{ExecutableCommand, QueueableCommand};
+use crossterm::terminal::is_raw_mode_enabled;
 
 use components::EntitiesToRedraw;
 
@@ -433,11 +434,15 @@ fn draw_entity(
                 // Get the style we need to render this grapheme with
                 let grapheme_style = stylemap.style_for(idx, line_num);
                 change_style_if_needed(term, &mut previous_style, &grapheme_style)?;
+                // Find that when print sprite at right border of the screen, character will be print at the next line, on left.
+                // So add a check to prevent this situation
+                if pos.x as usize+((*grapheme).0)< window.width as usize-1 {
+                    term.queue(crossterm::style::Print(&sprite.grapheme(grapheme)))?;
+                }
 
-                term.queue(crossterm::style::Print(&sprite.grapheme(grapheme)))?;
+                //term.queue(crossterm::style::Print(&sprite.grapheme(grapheme)))?;
             }
         }
-
         // Lines don't have to go to the end of the sprite. Pad them out so the sprite is rectangular
         if end < window.width as i32 && line.len() < sprite.width() {
             let unaccounted = sprite.width() - line.len();

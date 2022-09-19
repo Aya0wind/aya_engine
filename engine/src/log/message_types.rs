@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_spicy_networking::{ClientMessage, NetworkMessage, ServerMessage};
+use bevy_spicy_networking::{ClientMessage, NetworkMessage, ServerMessage, AppNetworkClientMessage};
 use serde::{Deserialize, Serialize};
 
 /////////////////////////////////////////////////////////////////////
@@ -19,35 +19,16 @@ pub struct SendToUserMessage {
     pub message: String,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct SendToServerMessage {
-    pub message: String,
-}
-
-
 #[typetag::serde]
 impl NetworkMessage for SendToUserMessage {}
 
+impl ServerMessage for SendToUserMessage {
+    const NAME: &'static str = "example:NewServerMessage";
+}
 impl ClientMessage for SendToUserMessage {
     const NAME: &'static str = "example:NewServerMessage";
 }
 
-#[typetag::serde]
-impl NetworkMessage for SendToServerMessage {}
-
-impl ServerMessage for SendToServerMessage {
-    const NAME: &'static str = "example:NewClientMessage";
-}
-
-
-#[allow(unused)]
-pub fn client_register_network_messages(app: &mut AppBuilder) {
-    use bevy_spicy_networking::AppNetworkClientMessage;
-
-    // The client registers messages that arrives from the server, so that
-    // it is prepared to handle them. Otherwise, an error occurs.
-    app.listen_for_client_message::<SendToUserMessage>();
-}
 
 #[allow(unused)]
 pub fn server_register_network_messages(app: &mut AppBuilder) {
@@ -55,5 +36,5 @@ pub fn server_register_network_messages(app: &mut AppBuilder) {
 
     // The server registers messages that arrives from a client, so that
     // it is prepared to handle them. Otherwise, an error occurs.
-    app.listen_for_server_message::<SendToServerMessage>();
+    app.listen_for_client_message::<SendToUserMessage>();
 }

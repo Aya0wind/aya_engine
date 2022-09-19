@@ -27,3 +27,5 @@ crossterm = { version = "0.21.0", features = ["serde"] }
 ron = "0.6.5"
 serde = { version = "1.0.130", features = ["derive"] }
 unicode-segmentation = "1.8.0"
+unicode-width="0.1.8"
+

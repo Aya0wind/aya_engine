@@ -6,6 +6,7 @@ use bevy::utils::{HashMap, HashSet};
 pub use crossterm::style::Color;
 use serde::{Deserialize, Serialize};
 use unicode_segmentation::UnicodeSegmentation;
+use unicode_width::UnicodeWidthStr;
 
 #[derive(Default)]
 pub(crate) struct PreviousEntityDetails(pub HashMap<Entity, (PreviousPosition, PreviousSize)>);
@@ -301,7 +302,7 @@ impl Visible {
     }
 }
 
-#[derive(Default, Eq, PartialEq, Debug, TypeUuid)]
+#[derive(Default, Eq, PartialEq, Debug, TypeUuid,Clone)]
 #[uuid = "f04f5352-e656-4a90-95a5-2269c02d0091"]
 pub struct Sprite {
     // The whole sprites's data
@@ -315,8 +316,7 @@ pub struct Sprite {
 
 impl Sprite {
     pub fn new<T: std::string::ToString>(value: T) -> Sprite {
-        let mut sprite = Sprite::default();
-        sprite.data = value.to_string();
+        let mut sprite = Sprite { data: value.to_string(), ..Default::default() };
 
         Sprite::convert_to_sprite(&mut sprite);
 
@@ -327,18 +327,20 @@ impl Sprite {
         sprite.max_width = 0;
 
         let mut current_line = Vec::new();
+        let mut width_counter = 0;
         for (start, grapheme) in UnicodeSegmentation::grapheme_indices(&*sprite.data, true) {
             if grapheme == "\r" || grapheme == "\n" || grapheme == "\r\n" {
-                sprite.max_width = std::cmp::max(sprite.max_width, current_line.len());
+                sprite.max_width = std::cmp::max(sprite.max_width, width_counter);
                 sprite.graphemes.push(std::mem::take(&mut current_line));
                 continue;
             }
 
             current_line.push((start, start + grapheme.len()));
+            width_counter+=UnicodeWidthStr::width(grapheme);
         }
 
         if !current_line.is_empty() {
-            sprite.max_width = std::cmp::max(sprite.max_width, current_line.len());
+            sprite.max_width = std::cmp::max(sprite.max_width, width_counter);
             sprite.graphemes.push(std::mem::take(&mut current_line));
         }
     }
@@ -378,7 +380,7 @@ impl Sprite {
     }
 }
 
-#[derive(Default, Eq, PartialEq, Debug)]
+#[derive(Default, Eq, PartialEq, Debug,Clone,PartialOrd, Ord)]
 pub struct Position {
     pub x: i32,
     pub y: i32,
