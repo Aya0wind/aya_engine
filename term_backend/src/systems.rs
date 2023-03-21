@@ -4,7 +4,7 @@ use bevy::app::Events;
 use bevy::prelude::*;
 use bevy::utils::HashSet;
 use bevy::window::WindowResized;
-use broccoli::prelude::*;
+use broccoli::*;
 use crossterm::{ExecutableCommand, QueueableCommand};
 use crossterm::terminal::is_raw_mode_enabled;
 
