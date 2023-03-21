@@ -39,19 +39,10 @@ pub struct SpriteBundle {
     pub visible: Visible,
 }
 
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Default,Copy, Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Colors {
     pub foreground: Option<Color>,
     pub background: Option<Color>,
-}
-
-impl Default for Colors {
-    fn default() -> Self {
-        Colors {
-            foreground: None,
-            background: None,
-        }
-    }
 }
 
 impl Colors {

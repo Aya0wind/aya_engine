@@ -19,10 +19,11 @@ fn main() {
 
     // A good way to ensure that you are not forgetting to register
     // any messages is to register them where they are defined!
-    shared::client_register_network_messages(&mut app);
+
     app.add_startup_system(connect_start_system.system());
     app.add_system(handle_incoming_messages.system());
     app.insert_resource(MyTimer(Timer::new(Duration::from_secs(3), true)));
+    shared::client_register_network_messages(&mut app);
     app.run();
 }
 

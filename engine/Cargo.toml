@@ -11,6 +11,7 @@ bevy_utils="0.5.0"
 bevy_app="0.5.0"
 tracing-subscriber={version = "0.3.3",features = ["env-filter"]}
 term_backend = { path = "../term_backend" }
+debug_client = { path = "../debug_client" }
 bevy_spicy_networking = "0.6.0"
 serde = "1.0.130"
 typetag = "0.1.7"
